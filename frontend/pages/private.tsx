@@ -6,12 +6,19 @@ const privatefc = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios('http://127.0.0.1:5000/private');
-      if (response.status === 200) {
-        const content = await response.data;
-        console.log(content);
-        setMessage(content.message);
-      }
+      await axios('http://127.0.0.1:5000/private', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
+        .then((response) => {
+          const content = response.data;
+          console.log(content);
+          setMessage(content.message);
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            setMessage('Login to see private message');
+          }
+        });
     })();
   }, []);
 
