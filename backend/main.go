@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/handler"
+	"backend/middleware"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -18,7 +19,9 @@ func main() {
 	}))
 
 	app.Get("/public", handler.Public)
-	app.Get("/private", handler.Private)
+
+	private := app.Group("/", middleware.AuthMiddleware)
+	private.Get("/private", handler.Private)
 
 	if err := app.Listen(":5000"); err != nil {
 		log.Println(err)
