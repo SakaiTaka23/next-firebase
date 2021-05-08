@@ -9,14 +9,15 @@ firebase.initializeApp({
   appID: '',
 });
 
-const authContext = createContext();
+const authContext = createContext({});
 
 export const useAuth = () => {
   return useContext(authContext);
 };
+
 function useProvideAuth() {
   const [user, setUser] = useState(null);
-  const signin = (email, password) => {
+  const signin = async (email: string, password: string) => {
     return firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -25,7 +26,8 @@ function useProvideAuth() {
         return response.user;
       });
   };
-  const signup = (email, password) => {
+
+  const signup = async (email: string, password: string) => {
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -34,7 +36,8 @@ function useProvideAuth() {
         return response.user;
       });
   };
-  const signout = () => {
+
+  const signout = async () => {
     return firebase
       .auth()
       .signOut()
@@ -42,7 +45,8 @@ function useProvideAuth() {
         setUser(false);
       });
   };
-  const sendPasswordResetEmail = (email) => {
+
+  const sendPasswordResetEmail = async (email: string) => {
     return firebase
       .auth()
       .sendPasswordResetEmail(email)
@@ -50,7 +54,7 @@ function useProvideAuth() {
         return true;
       });
   };
-  const confirmPasswordReset = (code, password) => {
+  const confirmPasswordReset = async (code: string, password: string) => {
     return firebase
       .auth()
       .confirmPasswordReset(code, password)
